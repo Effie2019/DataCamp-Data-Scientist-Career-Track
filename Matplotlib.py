@@ -51,13 +51,40 @@ fig, ax = plt.subplots()
 ax.bar(medals.index,medals["Gold"])
 ax.set_xticklabels(medals.index, rotation=90)
 ax.set_ylabel("Number of medals")
-
-             ax.bar(medals.index, medals["Silver"],bottom=medals["Gold"], label="Silver")
-
-
-# Stack bars for "Bronze" on top of that with label "Bronze"
-ax.bar(medals.index, medals["Bronze"],bottom=medals["Gold"]+medals["Silver"], label="Bronze")
-
-# Display the legend
+ax.bar(medals.index, medals["Silver"],bottom=medals["Gold"], label="Silver") #Stacked bar chart 1
+ax.bar(medals.index, medals["Bronze"],bottom=medals["Gold"]+medals["Silver"], label="Bronze") #Stacked bar chart 2
+ax.legend()# Display the legend
+plt.show()
+##Hist
+ax.hist(mens_rowing["Weight"],histtype='step',label="Rowing",bins=5)
+ax.hist(mens_gymnastics["Weight"],histtype='step',label="Gymnastics",bins=5)
+ax.set_xlabel("Weight (kg)")
+ax.set_ylabel("# of observations")
 ax.legend()
 plt.show()
+## Error Bar
+#Adding error-bars to a bar chart           
+ax.bar("Rowing", mens_rowing["Height"].mean(),yerr=mens_rowing["Height"].std())
+#Adding error-bars to a chart  
+ax.errorbar(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], yerr=seattle_weather["MLY-TAVG-STDDEV"])
+## Box
+ax.boxplot([mens_rowing["Height"],mens_gymnastics["Height"]])
+## Scatter plot 
+ax.scatter(climate_change["co2"],climate_change["relative_temp"])
+ax.scatter(climate_change["co2"],climate_change["relative_temp"],c=climate_change.index)      
+   
+##Sharing visualizations with others
+#select style
+plt.style.use("ggplot")
+plt.style.use("Solarize_Light2")
+#save
+fig.set_size_inches([3,5]) #set size
+fig.savefig("my_figure.png",dpi=300)   
+# Automate the visualization             
+fig, ax = plt.subplots()
+for sport in sports:# Loop over the different sports branches
+  sport_df = summer_2016_medals[summer_2016_medals["Sport"]==sport]
+  ax.bar(sport,sport_df["Weight"].mean(),yerr=sport_df["Weight"].std())
+ax.set_ylabel("Weight")
+ax.set_xticklabels(sports, rotation=90)
+fig.savefig("sports_weights.png")
